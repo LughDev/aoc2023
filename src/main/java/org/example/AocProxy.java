@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class AocProxy {
-    private static final String SESSION = "53616c7465645f5fcd298a25ec1c3689eaa51d57458f3444d8b85f86e80a1ab77f2564525eb938d6517b11592cd324b58bc6fe23c29e3b32d65139447cb71d6b";
+    private static final String SESSION = "";
     private static final String INPUTS_DIRECTORY = Main.inputsDirectory;
     private static final String YEAR = "2023";
     private static final String BASE_URL = "https://adventofcode.com";
