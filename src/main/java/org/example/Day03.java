@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Day03 extends AocDay{
     public Day03(Integer day) {
@@ -10,46 +11,83 @@ public class Day03 extends AocDay{
     @Override
     public String solvePart1() {
         Scanner scanner = getScanner();
-        Schematic schematic;
-        char[][] schema = new char[140][140];
-        int counter = 0;
+        ArrayList<String> list = new ArrayList<>();
         
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            schema[counter] = line.toCharArray();
-            counter++;
+        while(scanner.hasNextLine()) {
+            list.add(scanner.nextLine());
         }
         
-        schematic = new Schematic(schema);
+        char[][] schema = to2dArray(list);
+        Schematic schematic = new Schematic(schema);
         
         int sum = 0;
         
-        for(int y = 0; y<schema.length; y++) {
-            for (int x = 0; x < schema[y].length; x++) {
-//                System.out.println("y: "+y+",x: "+x+" "+schema[y][x]);
-                if(isSymbol(schema[y][x])){
-                    System.out.println("line "+y+": Found symbol: "+schema[y][x]);
-                    for(int y2 = y-1; y2<=y+1; y2++){
-                        for(int x2 = x-1; x2<=x+1; x2++){
-                            if(isNumber(schema[y2][x2]))
-                                System.out.println(schematic.contains(x2,y2) + " "+schematic.getNumber(x2,y2));
-                            if(schematic.contains(x2,y2)){
-                                System.out.println("\tAdding line "+y2+" '"+Integer.parseInt(schematic.getNumber(x2,y2))+"' '"+schematic.getNumber(x2,y2)+"'");
-//                                System.out.println("Adding "+Integer.parseInt(schematic.getNumber(x2,y2)));
-                                sum += Integer.parseInt(schematic.getNumber(x2,y2));
-                                x2+=schematic.getNumber(x2,y2).length()-schematic.getNumber(x2,y2).indexOf(schema[y2][x2])-1;
-                            }
-                        }
-                    }
-                }
-                
+        for(List<Schematic.Entry> numbers : schematic.symbolNumberMap.values()) {
+            for(Schematic.Entry entry : numbers) {
+                sum += Integer.parseInt(entry.entry);
             }
-//            System.out.println();
         }
+        
+        List<Schematic.Entry> symbolNumberMap = schematic.getSymbolNumberMap().values().stream().flatMap(List::stream).sorted().collect(Collectors.toList());
+
+//        System.out.println(symbolNumberMap);
+        
+        
+        //Visualize
+//        int y = 0;
+//        int x = 0;
+//        for(Schematic.Entry entry : symbolNumberMap) {
+//            printUpTo(schema,entry,x,y);
+//            y=entry.y;
+//            x=entry.x+entry.entry.length();
+//        }
+//        System.out.println();
         
         return "" + sum;
     }
-    
+
+    @Override
+    public String solvePart2() {
+        Scanner scanner = getScanner();
+        ArrayList<String> list = new ArrayList<>();
+
+        while(scanner.hasNextLine()) {
+            list.add(scanner.nextLine());
+        }
+
+        char[][] schema = to2dArray(list);
+        Schematic schematic = new Schematic(schema);
+
+        int sum = 0;
+        
+        for(Map.Entry<Schematic.Entry, List<Schematic.Entry>> entry: schematic.symbolNumberMap.entrySet()){
+            if(entry.getKey().entry.equals("*") && entry.getValue().size() == 2){
+                sum += Integer.parseInt(entry.getValue().get(0).entry) * Integer.parseInt(entry.getValue().get(1).entry);
+            }
+        }
+        
+        return ""+sum;
+    }
+
+    private void printUpTo(char[][] schema, Schematic.Entry entry, int x, int y) {
+        for(;y<=entry.y;y++) {
+            for(;x<(y==entry.y?entry.x+entry.entry.length():schema[y].length);x++) {
+                System.out.print(schema[y][x]);
+            }
+            if(x>=schema[y].length)
+                System.out.println();
+            x=0;
+        }
+    }
+
+    private char[][] to2dArray(ArrayList<String> list) {
+        char[][] array = new char[list.size()][];
+        for(int i=0; i<list.size();i++){
+            array[i] = list.get(i).toCharArray();
+        }
+        return array;
+    }
+
     private boolean isSymbol(char c) {
         return (c < '0' || c > '9') && c != '.';
     }
@@ -57,47 +95,61 @@ public class Day03 extends AocDay{
     private boolean isNumber(char c) {
         return c >= '0' && c <= '9';
     }
-
-    @Override
-    public String solvePart2() {
-        
-        return null;
-    }
     
     private class Schematic {
-//        private char[][] schema;
         private List<Entry> symbols;
         private Map<String,Entry> numberMap;
+        private Map<Entry,List<Entry>> symbolNumberMap;
         
         Schematic(char[][] schema) {
-//            this.schema = schema.clone();
-            numberMap = new HashMap<>();
+            numberMap = new TreeMap<>();
             symbols = new ArrayList<>();
             for(int y = 0; y<schema.length; y++){
                 for (int x = 0; x < schema[y].length; x++) {
                     if(isNumber(schema[y][x])){
-                        String num = "";
+                        StringBuilder num = new StringBuilder();
                         int start = x;
                         while(x < schema[y].length && isNumber(schema[y][x])) {
-                            num += schema[y][x];
+                            num.append(schema[y][x]);
                             x++;
                         }
-                        Entry entry = new Entry(y,start,num);
-//                        symbols.add(entry);
+                        Entry entry = new Entry(y,start,num.toString());
                         for(int i=start; i<x; i++) {
                             numberMap.put(createMapKey(i, y), entry);
                         }
+                        x--;
                     } else if(isSymbol(schema[y][x])) {
                         Entry entry = new Entry(y,x,""+schema[y][x]);
                         symbols.add(entry);
-//                        entryMap.put(createMapKey(x,y),entry);
                     }
                 }
             }
-            System.out.println("numberMapSize: "+numberMap.size());
+            
+            symbolNumberMap = new TreeMap<>();
+            
+            for(Entry entry : symbols) {
+                symbolNumberMap.put(entry, getSurroundingNumbers(entry));
+            }
+            
+//            System.out.println("symbols: "+symbols.toString());
+//            System.out.println("numberMapSize: "+numberMap);
+//            System.out.println(symbolNumberMap);
         }
-        
-        public boolean contains(int x, int y) {
+
+        private List<Entry> getSurroundingNumbers(Entry entry) {
+            Set<Entry> entries = new HashSet<>();
+            for (int dy = -1; dy <= 1; dy++){
+                for (int dx = -1; dx <= 1; dx++) {
+                    if(containsNumber(entry.x + dx, entry.y+dy)) {
+                        entries.add(numberMap.get(createMapKey(entry.x + dx, entry.y+dy)));
+                    }
+                }
+            }
+            
+            return new ArrayList<>(entries);
+        }
+
+        public boolean containsNumber(int x, int y) {
             return numberMap.containsKey(createMapKey(x,y));
         }
         
@@ -106,10 +158,24 @@ public class Day03 extends AocDay{
         }
         
         private String createMapKey(int x, int y){
-            return "y"+y+"x"+x;
+            return "y"+zeroPad(y)+"x"+zeroPad(x);
         }
         
-        private class Entry{
+        private String zeroPad(int num) {
+            if(num < 10){
+                return "00"+num;
+            } else if(num<100){
+                return "0"+num;
+            }
+            
+            return ""+num;
+        }
+
+        public Map<Entry, List<Entry>> getSymbolNumberMap() {
+            return symbolNumberMap;
+        }
+
+        private class Entry implements Comparable<Entry>{
             Integer x,y;
             String entry;
             
@@ -121,6 +187,11 @@ public class Day03 extends AocDay{
             
             public String toString() {
                 return String.format("{y: %d, x: %d, entry: %s}",y,x,entry);
+            }
+
+            @Override
+            public int compareTo(Entry o) {
+                return y - o.y == 0 ? x - o.x : y - o.y;
             }
         }
     }

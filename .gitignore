@@ -1,5 +1,5 @@
 src/main/inputs
-src/main/java/AocProxy.java
+src/main/java/org/example/AocProxy.java
 
 .gradle
 build/
