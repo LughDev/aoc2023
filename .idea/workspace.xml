@@ -4,15 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="600d1ba6-d6c1-419b-9173-88d393e6b2d0" name="Changes" comment="working on day3">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Day04.java" afterDir="false" />
+    <list default="true" id="600d1ba6-d6c1-419b-9173-88d393e6b2d0" name="Changes" comment="day 3 complete, start day 4">
       <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Day05.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Day06.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Day07.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/AocProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/AocProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Day03.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Day03.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Day04.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Day04.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +139,21 @@
       <option name="project" value="LOCAL" />
       <updated>1702012568608</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="day 3 complete, start day 4">
+      <created>1702150334817</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702150334817</updated>
+    </task>
+    <task id="LOCAL-00005" summary="day 3 complete, start day 4">
+      <created>1702150349038</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1702150349038</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -159,7 +171,8 @@
     <MESSAGE value="day 1 complete, day 2 started" />
     <MESSAGE value="day 1 complete, day 2 complete" />
     <MESSAGE value="working on day3" />
-    <option name="LAST_COMMIT_MESSAGE" value="working on day3" />
+    <MESSAGE value="day 3 complete, start day 4" />
+    <option name="LAST_COMMIT_MESSAGE" value="day 3 complete, start day 4" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
