@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        int[] days = {3};
+        int[] days = {4};
         for(int day : days) {
             String zDay = (day < 10 ? "0" : "") + day;
             
